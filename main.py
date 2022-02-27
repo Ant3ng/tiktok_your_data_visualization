@@ -21,7 +21,7 @@ st.sidebar.markdown("You'll see some graphs of your TikTok account data")
 
 st.sidebar.markdown("## Link")
 st.sidebar.markdown("[note](https://note.com/t_and/n/n18d335dd068e)")
-st.sidebar.markdown("[github](xxxxx)")
+st.sidebar.markdown("[github](https://github.com/Ant3ng/tiktok_your_data_visualization/tree/main)")
 
 
 
