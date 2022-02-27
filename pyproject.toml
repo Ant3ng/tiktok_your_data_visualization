@@ -2,7 +2,7 @@
 name = "tiktok_your_data_visualization"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["T.Ando <pengzha0anteng@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -10,7 +10,7 @@ numpy = "^1.22.2"
 pandas = "^1.4.1"
 matplotlib = "^3.5.1"
 seaborn = "^0.11.2"
-streamlit = "^1.5.1"
+streamlit = "^1.6.0"
 
 [tool.poetry.dev-dependencies]
 
