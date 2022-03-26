@@ -201,8 +201,3 @@ if uploaded_file is not None:
     if uploaded_file.type == 'application/zip':
         os.remove('user_data.json')
 
-    st.write('-'*50)
-    st.markdown(f"#### おしまい / Done")
-
-
-
