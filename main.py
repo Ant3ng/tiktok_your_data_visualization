@@ -84,97 +84,113 @@ if uploaded_file is not None:
         # Zip/Json以外選択できないようになるっぽいので、不要かも
         st.write(f"アップロードしたファイルはZip, Jsonの形式ではないようです。{new_line}Uploaded data format doesn't meet requirement to visualize. Only Zip/Json format is allowed")
 
+    st.write('-'*50)
+    option = st.selectbox(
+        "見る項目を選ぶ",
+        ["項目を選ぶ",
+         "フォロー履歴 / Following List",
+         "いいね履歴 / Like List",
+         "視聴履歴 / Video Browsing History",
+         "視聴数に対するいいねの割合 / Ratio of likes to views"]
+        )
+
+    if option == "項目を選ぶ":
+        pass
 
     ################################################################################################
     ###### Following list
     ################################################################################################
 
-    mod_data = pd.DataFrame(json_data['Activity']['Following List']['Following']).sort_values('Date').reset_index(drop=True)
-    mod_data = make_date_feature(mod_data)
+    elif option == "フォロー履歴 / Following List":
+        mod_data = pd.DataFrame(json_data['Activity']['Following List']['Following']).sort_values('Date').reset_index(drop=True)
+        mod_data = make_date_feature(mod_data)
 
-    st.write('-'*50)
-    st.markdown(f"#### フォロー履歴 / Following List")
-    st.write(f"UserNameが空欄のものは、UserNameが初期値/未設定のものだと考えられる{new_line}Maybe blank name is not named yet")
-    st.dataframe(mod_data[['Date', 'UserName']])
+        st.write('-'*50)
+        st.markdown(f"#### フォロー履歴 / Following List")
+        st.write(f"UserNameが空欄のものは、UserNameが初期値/未設定のものだと考えられます。{new_line}Maybe blank name is not named yet")
+        st.dataframe(mod_data[['Date', 'UserName']])
 
-    draw_countplot_year(mod_data, title=f"Number of followings every year (Total = {len(mod_data)})")
-    draw_countplot_hour(mod_data, title="Number of total followings every hour")
-    draw_countplot_year_month(mod_data, title="Number of followings every year-month")
-    draw_countplot_dayofweek(mod_data, title="Number of total followings every dayofweek")
+        draw_countplot_year(mod_data, title=f"Number of followings every year (Total = {len(mod_data)})")
+        draw_countplot_hour(mod_data, title="Number of total followings every hour")
+        draw_countplot_year_month(mod_data, title="Number of followings every year-month")
+        draw_countplot_dayofweek(mod_data, title="Number of total followings every dayofweek")
 
 
     ################################################################################################
     ###### Like list
     ################################################################################################
 
-    mod_data = pd.DataFrame(json_data['Activity']['Like List']['ItemFavoriteList']).sort_values('Date').reset_index(drop=True)
-    mod_data = make_date_feature(mod_data)
+    elif option == "いいね履歴 / Like List":
+        mod_data = pd.DataFrame(json_data['Activity']['Like List']['ItemFavoriteList']).sort_values('Date').reset_index(drop=True)
+        mod_data = make_date_feature(mod_data)
 
-    st.write('-'*50)
-    st.markdown(f"#### いいね履歴 / Like List")
-    st.write(f"初期のデータが入っていないことがあるが、仕様と思われる。URLが途中で切れている場合、右側に表示されている矢印をクリックすると全て表示される")
-    st.write(f"Early data might be missing and It's not clear why. In order to see full VideoLink, click 'View fullscreen'")
-    st.dataframe(mod_data[['Date', 'VideoLink']].sort_index())
+        st.write('-'*50)
+        st.markdown(f"#### いいね履歴 / Like List")
+        st.write(f"一定期間より前のデータが取得できない、ある特定期間のデータ抜けていることがあるようです。URLが途中で切れている場合、右側に表示されている矢印をクリックすると全て表示されます。")
+        st.write(f"Old data might not be available, so early-user might feel disappointed. In order to see full VideoLink, click 'View fullscreen'")
+        st.dataframe(mod_data[['Date', 'VideoLink']].sort_index())
 
-    draw_countplot_year(mod_data, title=f"Number of likes every year (Total = {len(mod_data)})")
-    draw_countplot_hour(mod_data, title="Number of total likes every hour")
-    draw_countplot_year_month(mod_data, title="Number of likes every year-month")
-    draw_countplot_dayofweek(mod_data, title="Number of total likes every dayofweek")
+        draw_countplot_year(mod_data, title=f"Number of likes every year (Total = {len(mod_data)})")
+        draw_countplot_hour(mod_data, title="Number of total likes every hour")
+        draw_countplot_year_month(mod_data, title="Number of likes every year-month")
+        draw_countplot_dayofweek(mod_data, title="Number of total likes every dayofweek")
 
 
     ################################################################################################
     ###### Video Browsing History
     ################################################################################################
-    mod_data = pd.DataFrame(json_data['Activity']['Video Browsing History']['VideoList']).sort_values('Date').reset_index(drop=True)
-    mod_data = make_date_feature(mod_data)
+    elif option == "視聴履歴 / Video Browsing History":
+        mod_data = pd.DataFrame(json_data['Activity']['Video Browsing History']['VideoList']).sort_values('Date').reset_index(drop=True)
+        mod_data = make_date_feature(mod_data)
 
-    st.write('-'*50)
-    st.markdown(f"#### 視聴履歴 / Video Browsing History")
-    st.write(f"初期のデータが入っていないことがあるが、仕様と思われる。URLが途中で切れている場合、右側に表示されている矢印をクリックすると全て表示される。同時刻に複数データが入っていることがある。つまり、0秒でスワイプした動画も含まれている。")
-    st.write(f"Early data might be missing and It's not clear why. In order to see full VideoLink, click 'View fullscreen'. You might find multiple data at the same time. It means even if you just swipe video, it is counted as 'watched'")
-    st.dataframe(mod_data[['Date', 'VideoLink']].sort_index())
+        st.write('-'*50)
+        st.markdown(f"#### 視聴履歴 / Video Browsing History")
+        st.write(f"一定期間より前のデータが取得できない、ある特定期間のデータ抜けていることがあるようです。URLが途中で切れている場合、右側に表示されている矢印をクリックすると全て表示されます。同時刻に複数データが入っていることがある。つまり、0秒でスワイプした動画も含まれている。")
+        st.write(f"Old data might not be available, so early-user might feel disappointed. In order to see full VideoLink, click 'View fullscreen'. You might find multiple data at the same time. It means even if you just swipe video, it is counted as 'watched'")
+        st.dataframe(mod_data[['Date', 'VideoLink']].sort_index())
 
-    draw_countplot_year(mod_data, title=f"Number of browsing every year (Total = {len(mod_data)})")
-    draw_countplot_hour(mod_data, title="Number of total browsing every hour")
-    draw_countplot_year_month(mod_data, title="Number of browsing every year-month")
-    draw_countplot_dayofweek(mod_data, title="Number of total browsing every dayofweek")
+        draw_countplot_year(mod_data, title=f"Number of browsing every year (Total = {len(mod_data)})")
+        draw_countplot_hour(mod_data, title="Number of total browsing every hour")
+        draw_countplot_year_month(mod_data, title="Number of browsing every year-month")
+        draw_countplot_dayofweek(mod_data, title="Number of total browsing every dayofweek")
 
 
     ################################################################################################
     ###### Like / Browsing Ratio
     ################################################################################################
-    like_data = pd.DataFrame(json_data['Activity']['Like List']['ItemFavoriteList']).sort_values('Date').reset_index(drop=True)
-    like_data = make_date_feature(like_data).sort_index()
+    elif option == "視聴数に対するいいねの割合 / Ratio of likes to views":
+        like_data = pd.DataFrame(json_data['Activity']['Like List']['ItemFavoriteList']).sort_values('Date').reset_index(drop=True)
+        like_data = make_date_feature(like_data).sort_index()
 
-    browsing_data = pd.DataFrame(json_data['Activity']['Video Browsing History']['VideoList']).sort_values('Date').reset_index(drop=True)
-    browsing_data = make_date_feature(browsing_data).sort_index()
+        browsing_data = pd.DataFrame(json_data['Activity']['Video Browsing History']['VideoList']).sort_values('Date').reset_index(drop=True)
+        browsing_data = make_date_feature(browsing_data).sort_index()
 
-    # Early data might be missing, so adjust date to give accurate ratio
-    min_max_date = max(like_data['Date'].min(), browsing_data['Date'].min())
-    like_data = like_data.query("Date >= @min_max_date")
-    browsing_data = browsing_data.query("Date >= @min_max_date")
+        # Early data might be missing, so adjust date to give accurate ratio
+        min_max_date = max(like_data['Date'].min(), browsing_data['Date'].min())
+        like_data = like_data.query("Date >= @min_max_date")
+        browsing_data = browsing_data.query("Date >= @min_max_date")
 
-    like_browsing_ratio = like_data.groupby('year_month').size() / browsing_data.groupby('year_month').size()
-    like_browsing_ratio.fillna(0, inplace=True)
+        like_browsing_ratio = like_data.groupby('year_month').size() / browsing_data.groupby('year_month').size()
+        like_browsing_ratio.fillna(0, inplace=True)
 
-    # You might not use TikTok some year-month. That leads to missing year-month
-    # Process below is about imputation of these missing.
-    max_date = max(like_data['Date'].max(), browsing_data['Date'].max())
-    date_list = []
-    for y in range(min_max_date.year, max_date.year+1):
-        for m in range(1, 13):
-            if (y == min_max_date.year) and (m < min_max_date.month):
-                continue
-            if (y == max_date.year) and (m > max_date.month):
-                continue
-            date_list.append(f"{y} {m:02d}")
+        # You might not use TikTok some year-month. That leads to missing year-month
+        # Process below is about imputation of these missing.
+        max_date = max(like_data['Date'].max(), browsing_data['Date'].max())
+        date_list = []
+        for y in range(min_max_date.year, max_date.year+1):
+            for m in range(1, 13):
+                if (y == min_max_date.year) and (m < min_max_date.month):
+                    continue
+                if (y == max_date.year) and (m > max_date.month):
+                    continue
+                date_list.append(f"{y} {m:02d}")
 
-    date_df = pd.DataFrame(date_list, columns=['year_month'])
-    like_browsing_ratio = date_df.merge(like_browsing_ratio.reset_index(), 'left', 'year_month')
+        date_df = pd.DataFrame(date_list, columns=['year_month'])
+        like_browsing_ratio = date_df.merge(like_browsing_ratio.reset_index(), 'left', 'year_month')
 
-    st.write('-'*50)
-    st.markdown(f"#### 視聴数に対するいいねの割合 / Ratio of likes to views")
-    draw_like_browsing_ratio(like_browsing_ratio, title='Ratio of likes to views')
+        st.write('-'*50)
+        st.markdown(f"#### 視聴数に対するいいねの割合 / Ratio of likes to views")
+        draw_like_browsing_ratio(like_browsing_ratio, title='Ratio of likes to views')
 
     ################################################################################################
     ###### Delete Uploaded Data
@@ -184,9 +200,4 @@ if uploaded_file is not None:
 
     if uploaded_file.type == 'application/zip':
         os.remove('user_data.json')
-
-    st.write('-'*50)
-    st.markdown(f"#### おしまい / Done")
-
-
 
