@@ -29,15 +29,16 @@ def open_json_file_from_streamlit_cls(st_cls):
 
 
 def make_date_feature(df, dt_col='Date'):
-    df['Date'] = pd.to_datetime(df['Date'])
-    df['Date'] = df['Date'] + timedelta(hours = 9) # 日本時間に修正
+    df[dt_col] = pd.to_datetime(df[dt_col])
+    df[dt_col] = df[dt_col] + timedelta(hours = 9) # 日本時間に修正
 
-    df['year'] = df[dt_col].dt.year
-    df['month'] = df[dt_col].dt.month
-    df['day'] = df[dt_col].dt.day
+    date_attr = ['year', 'month', 'day', 'hour']
+
+    for attr in date_attr:
+        df[attr] = getattr(df[dt_col].dt, attr)
+
     # df['dayofweek'] = df[dt_col].dt.dayofweek
     df['dayofweek'] = df[dt_col].dt.day_name()
-    df['hour'] = df[dt_col].dt.hour
     df['year_month'] = df['year'].astype(str) + ' ' + df['month'].apply(lambda x: f"{x:02d}")
 
     return df
