@@ -86,15 +86,15 @@ if uploaded_file is not None:
 
     st.write('-'*50)
     option = st.selectbox(
-        "見る項目を選ぶ",
-        ["項目を選ぶ",
+        "見る項目を選ぶ / Select what you want to see",
+        ["項目を選ぶ / Select what you want to see",
          "フォロー履歴 / Following List",
          "いいね履歴 / Like List",
          "視聴履歴 / Video Browsing History",
          "視聴数に対するいいねの割合 / Ratio of likes to views"]
         )
 
-    if option == "項目を選ぶ":
+    if option == "項目を選ぶ / Select what you want to see":
         pass
 
     ################################################################################################
